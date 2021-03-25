@@ -1,2 +1,2 @@
 # HWPL
-Hugagingface With Pytorch Lightning
+Hugagingface With PyTorch Lightning
