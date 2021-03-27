@@ -11,11 +11,8 @@ from QAmodel2 import ModelOriginal
 torch.multiprocessing.set_sharing_strategy("file_system")
 
 def create_args():
-    models = {
-        "splitted": Model,
-        "original": ModelOriginal
-    }
-    model_type = "original"
+    
+    model_class = "original"
     train_file = "train*.json" if model_type == "splitted" else "ko_nia_normal_squad_all_preprocessed.json" # "AIhub_squad_train_512.json"
     val_file = "val*.json" if model_type == "splitted" else "ko_nia_clue0529_squad_all_preprocessed.json" # "AIhub_squad_val_512.json"
 
@@ -24,7 +21,7 @@ def create_args():
     ckpt_path = repo_path.parent / "ckpt"
     
     args_dict = {
-        "model_class": models[model_type],
+        "model_class": model_class,
         "task": "AIhub_QA",
         "data_path": data_path,
         "ckpt_path": ckpt_path,
@@ -82,6 +79,11 @@ def create_args():
 def main(args_dict):
     print("[INFO] Using PyTorch Ver", torch.__version__)
     print("[INFO] Seed:", args_dict["random_seed"])
+    models = {
+        "splitted": Model,
+        "original": ModelOriginal
+    }
+    model_class = models[args_dict["model_class"]]
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
         filename="epoch{epoch:02d}-f1{f1:.4f}",
         # dirpath=args_dict["ckpt_path"],
@@ -91,7 +93,7 @@ def main(args_dict):
     )
     earlystop_callback = pl.callbacks.EarlyStopping("val_f1", mode="max")
     pl.seed_everything(args_dict["random_seed"])
-    model = args_dict["model_class"](**args_dict)
+    model = model_class(**args_dict)
     logger = pl.loggers.TensorBoardLogger(str(args_dict["ckpt_path"]), name=args_dict["task"])
     
     print("[INFO] Start FineTuning")

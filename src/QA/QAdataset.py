@@ -17,7 +17,6 @@ def test(args_dict:Dict[str, Any]):
                     question_text = qa["question"]
                     if qas_id in ["m6_415182-2", "m6_413880-2", "m6_413136-2"]:
                         print(path.name, qas_id)
-                        
 
 def preprocess_dataset(args_dict:Dict[str, Any]):
     """delete all blank question and context"""

@@ -1,2 +1,2 @@
-nohup python ./01_NLP/AIhub_QA/QAtrainer.py > ../train.log &
-echo $! > ../save_pid.txt
+nohup python ./src/QA/QAtrainer.py > ../train.log &
+# echo $! > ../save_pid.txt
